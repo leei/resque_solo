@@ -12,7 +12,7 @@ module Resque
       return nil if before_hooks.any? { |result| result == false }
 
       result = Job.create(queue, klass, *args)
-      return nil if result == "EXISTED"
+      return nil if String === result && result == "EXISTED"
 
       Plugin.after_enqueue_hooks(klass).each do |hook|
         klass.send(hook, *args)
